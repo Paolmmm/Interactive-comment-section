@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="sass/main.scss" />
+    <script defer src="js/controller.js"></script>
+    <title>Interactive comments section // paolm</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="comment">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">amyrobson</p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--reply">
+          <img
+            src="images/icon-reply.svg"
+            alt="reply btn"
+            class="comment__btn__icon"
+          />
+          <span>Reply</span>
+        </button>
+        <p class="comment__content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed assu
+          menda quisquam beatae iure adipisci unde voluptatibus facere doloribus
+          est, dignissimos, nobis odio numquam
+        </p>
+      </div>
+
+      <div class="comment comment--add comment--reply">
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment--add__avatar"
+        />
+        <form action="" class="form">
+          <textarea
+            name="reply-comment"
+            id="reply-comment"
+            placeholder="Add a comment..."
+            class="form__input"
+            rows="3"
+          ></textarea>
+          <label for="reply-comment"
+            ><button class="submit-btn submit-btn--reply" type="submit">
+              REPLY
+            </button></label
+          >
+        </form>
+      </div>
+
+      <div class="comment">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">amyrobson</p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--reply">
+          <img
+            src="images/icon-reply.svg"
+            alt="reply btn"
+            class="comment__btn__icon"
+          />
+          <span>Reply</span>
+        </button>
+        <p class="comment__content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed assu
+          menda quisquam beatae iure adipisci unde voluptatibus facere doloribus
+          est, dignissimos, nobis odio numquam
+        </p>
+      </div>
+
+      <div class="comment comment--reply">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">amyrobson</p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--reply">
+          <img
+            src="images/icon-reply.svg"
+            alt="reply btn"
+            class="comment__btn__icon"
+          />
+          <span>Reply</span>
+        </button>
+        <p class="comment__content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed assu
+          menda quisquam beatae iure adipisci unde voluptatibus facere doloribus
+          est, dignissimos, nobis odio numquam
+        </p>
+      </div>
+
+      <div class="comment comment--reply">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">amyrobson</p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--reply">
+          <img
+            src="images/icon-reply.svg"
+            alt="reply btn"
+            class="comment__btn__icon"
+          />
+          <span>Reply</span>
+        </button>
+        <p class="comment__content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed assu
+          menda quisquam beatae iure adipisci unde voluptatibus facere doloribus
+          est, dignissimos, nobis odio numquam
+        </p>
+      </div>
+
+      <div class="comment comment--reply comment--own">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">
+          amyrobson <span class="comment__tag">you</span>
+        </p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--delete">
+          <img
+            src="images/icon-delete.svg"
+            alt="delete btn"
+            class="comment__btn__icon"
+          />
+          <span>Delete</span>
+        </button>
+        <button class="comment__btn comment__btn--edit">
+          <img
+            src="images/icon-edit.svg"
+            alt="edit btn"
+            class="comment__btn__icon"
+          />
+          <span>Edit</span>
+        </button>
+        <p class="comment__content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed assu
+          menda quisquam beatae iure adipisci unde voluptatibus facere doloribus
+          est, dignissimos, nobis odio numquam
+        </p>
+      </div>
+
+      <div class="comment comment--reply comment--own comment--update">
+        <div class="comment__likes">
+          <button class="comment__likes__btn comment__likes__btn--up">+</button>
+          <p class="comment__likes__value">12</p>
+          <button class="comment__likes__btn comment__likes__btn--down">
+            &ndash;
+          </button>
+        </div>
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment__avatar"
+        />
+        <p class="comment__username">
+          amyrobson <span class="comment__tag">you</span>
+        </p>
+        <p class="comment__date">1 month ago</p>
+        <button class="comment__btn comment__btn--delete">
+          <img
+            src="images/icon-delete.svg"
+            alt="delete btn"
+            class="comment__btn__icon"
+          />
+          <span>Delete</span>
+        </button>
+        <button class="comment__btn comment__btn--edit">
+          <img
+            src="images/icon-edit.svg"
+            alt="edit btn"
+            class="comment__btn__icon"
+          />
+          <span>Edit</span>
+        </button>
+        <!-- class="comment__content" -->
+        <form action="" class="form">
+          <textarea
+            name="update-comment"
+            id="update-comment"
+            placeholder="Add a comment..."
+            class="form__input"
+            rows="3"
+          ></textarea>
+          <label for="update-comment"
+            ><button class="submit-btn submit-btn--update" type="submit">
+              UPDATE
+            </button></label
+          >
+        </form>
+      </div>
+
+      <div class="comment comment--add">
+        <img
+          src="images/avatars/image-amyrobson.png"
+          alt="profile pic"
+          class="comment--add__avatar"
+        />
+        <form action="" class="form">
+          <textarea
+            name="send-comment"
+            id="send-comment"
+            placeholder="Add a comment..."
+            class="form__input"
+            rows="3"
+          ></textarea>
+          <label for="send-comment"
+            ><button class="submit-btn submit-btn--send" type="submit">
+              SEND
+            </button></label
+          >
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

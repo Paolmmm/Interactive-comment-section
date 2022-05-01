@@ -1,0 +1,5 @@
+.parcel_cache
+dist
+interactive-comment-section-main
+node_modules
+data.json

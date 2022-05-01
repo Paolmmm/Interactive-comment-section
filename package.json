@@ -1,0 +1,15 @@
+{
+  "name": "interactive_comment_section",
+  "version": "1.0.0",
+  "description": "add, edit, delete comments",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "Paolm",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.5.0",
+    "parcel": "^2.5.0"
+  }
+}
