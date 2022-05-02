@@ -11,7 +11,9 @@
     />
 
     <link rel="stylesheet" href="sass/main.scss" />
-    <script defer src="js/controller.js"></script>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <script defer type="module" src="js/controller.js"></script>
+
     <title>Interactive comments section // paolm</title>
   </head>
   <body>
@@ -268,6 +270,17 @@
             </button></label
           >
         </form>
+      </div>
+
+      <div class="overlay hidden"></div>
+      <div class="pop-up hidden">
+        <h2>Delete comment</h2>
+        <p>
+          Are you sure you want to delete this comment? This will remove the
+          comment and can't be undone.
+        </p>
+        <button class="pop-up__cancel-btn">No, cancel</button>
+        <button class="pop-up__delete-btn">Yes, delete</button>
       </div>
     </div>
   </body>

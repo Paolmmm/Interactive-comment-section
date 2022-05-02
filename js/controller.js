@@ -79,6 +79,14 @@ const data = {
   ],
 };
 
+const submitBtn = document.querySelectorAll(".submit-btn");
 const formInput = document.querySelectorAll(".form__input");
+const updateComment = document.querySelector("#update-comment");
 
-console.dir(formInput);
+console.dir(updateComment);
+
+submitBtn.forEach((el) =>
+  el.addEventListener("click", function (e) {
+    e.preventDefault();
+  })
+);

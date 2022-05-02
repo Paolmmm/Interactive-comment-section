@@ -2,14 +2,16 @@
   "name": "interactive_comment_section",
   "version": "1.0.0",
   "description": "add, edit, delete comments",
-  "default": "index.html",
+  "source": "index.html",
   "scripts": {
+    "compile:sass": "node-sass sass/main.scss style.css -w",
     "start": "parcel index.html"
   },
   "author": "Paolm",
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.5.0",
+    "node-sass": "^7.0.1",
     "parcel": "^2.5.0"
   }
 }
