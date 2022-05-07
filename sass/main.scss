@@ -35,7 +35,7 @@ body {
   line-height: 1;
   font-weight: 400;
 
-  background-color: var(--Light-gray);
+  background-color: var(--Very-light-gray);
   padding: 1.2rem;
 
   height: 100vh;
@@ -55,6 +55,16 @@ button {
 %btn-active-opacity {
   &:active {
     opacity: 50%;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -107,6 +117,7 @@ button {
 }
 
 .comment {
+  z-index: 2;
   margin: 1rem 0;
   position: relative;
 
@@ -131,8 +142,12 @@ button {
     align-self: flex-start;
     grid-column: 1 / 2;
     grid-row: 1 / -1;
+
+    min-width: 4.2rem;
+
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.2rem;
     background-color: var(--Very-light-gray);
     border-radius: 10px;
@@ -162,6 +177,9 @@ button {
 
   &__avatar {
     height: 3rem;
+    width: 3rem;
+    object-fit: cover;
+    border-radius: 100px;
 
     @media only screen and (max-width: 38.5em) {
       grid-row: 1;
@@ -216,6 +234,7 @@ button {
   &__content {
     grid-column: 2 / -1;
     line-height: 1.3;
+    align-self: flex-start;
 
     @media only screen and (max-width: 38.5em) {
       grid-column: 1 / -1;
@@ -225,8 +244,30 @@ button {
 
 .comment--reply {
   margin: 0.5rem 0;
-  width: 95%;
+  width: 90%;
   align-self: flex-end;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -5%;
+    height: 100%;
+    width: 0.3rem;
+    background-color: var(--Light-gray);
+    border-radius: 5px;
+
+    @media only screen and (max-width: 38.5em) {
+      left: -7%;
+    }
+  }
+}
+
+// SIDEBAR
+.comment--reply + .comment--reply {
+  &::before {
+    height: 150%;
+  }
 }
 
 .comment--own {
@@ -234,6 +275,7 @@ button {
     span {
       background-color: var(--Moderate-blue);
       color: var(--White);
+      // questo inline-block serve?
       display: inline-block;
       padding: 0.2rem 0.8rem;
       border-radius: 4px;
@@ -254,7 +296,6 @@ button {
   grid-template-columns: max-content 1fr;
   grid-template-rows: 1fr;
   gap: 1.4rem;
-  width: 100%;
 
   @media only screen and (max-width: 38.5em) {
     grid-template-columns: 1fr;
@@ -263,6 +304,7 @@ button {
   &__avatar {
     height: 4rem;
     align-self: flex-start;
+    border-radius: 100px;
 
     @media only screen and (max-width: 38.5em) {
       position: absolute;
@@ -288,7 +330,7 @@ button {
 }
 
 .overlay {
-  z-index: 2;
+  z-index: 5;
   position: fixed;
   top: 0;
   right: 0;
@@ -316,6 +358,7 @@ button {
     margin-bottom: 2.5rem;
     color: var(--Dark-blue);
     grid-column: 1 / -1;
+    grid-row: 1;
   }
 
   p {
@@ -324,7 +367,8 @@ button {
     grid-column: 1 / -1;
   }
 
-  button {
+  &__btn {
+    grid-row: 3;
     color: var(--Very-light-gray);
     padding: 1.4rem;
     border-radius: 10px;
@@ -332,18 +376,79 @@ button {
     font-weight: 500;
 
     @extend %btn-active-opacity;
+
+    &--cancel {
+      background-color: var(--Grayish-Blue);
+    }
+
+    &--delete {
+      background-color: var(--Soft-Red);
+    }
   }
 
-  &__cancel-btn {
-    background-color: var(--Grayish-Blue);
+  &__profile-pic {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-bottom: 2.5rem;
+
+    svg {
+      width: 8rem;
+      height: 8rem;
+      fill: red;
+      animation: rotate 2s infinite linear;
+    }
+
+    &__img {
+      width: 100%;
+    }
   }
 
-  &__delete-btn {
-    background-color: var(--Soft-Red);
+  &__form {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    legend {
+      grid-column: 1 / 5;
+    }
+
+    .male {
+      grid-column: 1 / 3;
+    }
+
+    .female {
+      grid-column: 3 / -1;
+    }
+
+    #age + label {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+
+    #age,
+    #name {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    #name + label {
+      grid-column: 1 / -1;
+      grid-row: 5;
+    }
+
+    &__init-btn {
+      grid-column: 1 / -1;
+      background-color: red;
+    }
   }
 }
 
-.hidden {
+.hiddenOpacity {
   visibility: hidden;
   opacity: 0;
+}
+
+.hiddenDisplay {
+  display: none;
 }
