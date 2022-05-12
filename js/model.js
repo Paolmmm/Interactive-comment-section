@@ -1,45 +1,91 @@
-import { randomNum } from "./helper.js";
+import { MAX_AGE, MIN_AGE } from "./config.js";
+import { calcNum, today } from "./helper.js";
 
-// DA USARE CON PARCEL
-// import { async } from "regenerator-runtime";
+export let user = {};
+export const comments = [];
 
-export const users = {
-  currentUser: {
-    username: "paolm",
-    image:
-      "https://content.fakeface.rest/male_25_de733d1d9c1216e408903e2cb93108a426274769.jpg",
-  },
-  comments: [],
-};
+export async function generateFace(gender, age) {
+  try {
+    let newAge = age;
+    if (age > MAX_AGE) newAge = MAX_AGE;
+    if (age < MIN_AGE) newAge = MIN_AGE;
 
-// TEST
-export async function fakerAPI(comments) {
-  const res = await fetch(
-    `https://fakerapi.it/api/v1/custom?_quantity=${comments}&username=firstName&date=date&content=text&id=counter`
-  );
-  const data = await res.json();
-
-  data.data.forEach((comment) => {
-    comment.likes = randomNum(0, 20);
-  });
-  users.comments = data.data;
-  return data.data;
+    const res = await fetch(
+      `https://fakeface.rest/face/json?gender=${gender}&minimum_age=${
+        newAge - 1
+      }&maximum_age=${newAge + 1}`
+    );
+    const data = await res.json();
+    return data.image_url;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-export async function fakerAPIPerson(quantity) {
-  const res = await fetch(
-    `https://fakerapi.it/api/v1/persons?_quantity=${quantity}`
-  );
-  const data = await res.json();
+export async function generateComment() {
+  try {
+    const res =
+      await fetch(`https://fakerapi.it/api/v1/custom?_quantity=1&username=lastName&birthday=date&boolean=boolean&comment=text
+  `);
+    const data = await res.json();
 
-  users.comments.forEach((user, i) => {
-    user.birthday = data.data[i].birthday;
-    user.gender = data.data[i].gender;
-  });
+    const age = today.getFullYear() - data.data[0].birthday.split("-")[0];
+    const gender = data.data[0].boolean ? "male" : "female";
 
-  return data.data;
+    const photo = await generateFace(gender, age);
+    const likes = Math.trunc(Math.random() * MAX_AGE);
+    const repliesLength = comments.reduce((acc, el) => {
+      acc = acc + el.replies.length;
+      return acc;
+    }, 0);
+    const id = repliesLength + comments.length;
+
+    return {
+      username: data.data[0].username,
+      comment: data.data[0].comment,
+      id: id,
+      image: photo,
+      likes: likes,
+      date: new Date(),
+    };
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-export function storeData() {
-  localStorage.setItem("users", JSON.stringify(users));
+export function positionComment(comment) {
+  if (comments.length < 1 || Math.random() < 0.5) {
+    comment.replies = [];
+    comments.push(comment);
+    // console.log(comments);
+    return [comment];
+  } else {
+    const i = calcNum(comments.length);
+    comments[i].replies.push(comment);
+    // console.log(comments);
+    return [
+      comment,
+      comments[i].replies.length > 1 ? comments[i].replies : [comments[i]],
+    ];
+  }
 }
+
+export function createUser(obj) {
+  user.username = obj.username;
+  user.gender = obj.gender;
+  user.age = obj.age;
+}
+
+export function setPropic(image) {
+  user.image = image;
+}
+
+export function saveUserState() {
+  localStorage.setItem("user", JSON.stringify(user));
+}
+
+function init() {
+  const storage = localStorage.getItem("user");
+  if (storage) user = JSON.parse(storage);
+}
+init();

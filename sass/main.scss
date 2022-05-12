@@ -175,16 +175,32 @@ button {
     }
   }
 
-  &__avatar {
+  &__img {
     height: 3rem;
     width: 3rem;
-    object-fit: cover;
-    border-radius: 100px;
+
+    & > * {
+      border-radius: 100px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     @media only screen and (max-width: 38.5em) {
       grid-row: 1;
     }
   }
+
+  // &__avatar {
+  //   height: 3rem;
+  //   width: 3rem;
+  //   object-fit: cover;
+  //   border-radius: 100px;
+
+  //   @media only screen and (max-width: 38.5em) {
+  //     grid-row: 1;
+  //   }
+  // }
 
   &__username {
     font-weight: 500;
@@ -235,6 +251,10 @@ button {
     grid-column: 2 / -1;
     line-height: 1.3;
     align-self: flex-start;
+
+    span {
+      font-weight: 700;
+    }
 
     @media only screen and (max-width: 38.5em) {
       grid-column: 1 / -1;
@@ -353,12 +373,15 @@ button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 1.4rem;
+  box-shadow: 0 5px 20px rgba(86, 86, 86, 0.4);
+  text-align: center;
 
   h2 {
     margin-bottom: 2.5rem;
     color: var(--Dark-blue);
     grid-column: 1 / -1;
     grid-row: 1;
+    text-transform: uppercase;
   }
 
   p {
@@ -377,11 +400,11 @@ button {
 
     @extend %btn-active-opacity;
 
-    &--cancel {
+    &--accept {
       background-color: var(--Grayish-Blue);
     }
 
-    &--delete {
+    &--cancel {
       background-color: var(--Soft-Red);
     }
   }
@@ -391,14 +414,14 @@ button {
     justify-self: center;
     margin-bottom: 2.5rem;
 
-    svg {
+    ion-icon {
       width: 8rem;
       height: 8rem;
-      fill: red;
-      animation: rotate 2s infinite linear;
+      color: var(--Dark-blue);
+      animation: rotate 1s infinite linear;
     }
 
-    &__img {
+   img {
       width: 100%;
     }
   }
@@ -408,6 +431,19 @@ button {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
+
+    & > input {
+      font-family: inherit;
+      font-size: inherit;
+      padding: 1rem;
+      border: 1px solid var(--Grayish-Blue);
+      border-radius: 5px;
+
+      &::placeholder {
+        font-style: italic;
+        opacity: 0.4;
+      }
+    }
 
     legend {
       grid-column: 1 / 5;
@@ -419,6 +455,11 @@ button {
 
     .female {
       grid-column: 3 / -1;
+    }
+
+    .male,
+    .female {
+      text-align: center;
     }
 
     #age + label {
@@ -438,8 +479,11 @@ button {
     }
 
     &__init-btn {
+      grid-row: 7;
       grid-column: 1 / -1;
-      background-color: red;
+      background-color: var(--Soft-Red);
+      border-radius: 5px;
+      padding: 1rem;
     }
   }
 }

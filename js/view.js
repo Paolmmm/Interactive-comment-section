@@ -1,168 +1,125 @@
-// DA USARE CON PARCEL (RICORDA ALLE IMGS SVG DI SOSTITUIRE src="..." con src="${iconEdit}")
-// import iconEdit from "url:../images/icon-edit.svg";
-// import iconDelete from "url:../images/icon-delete.svg";
-// import iconReply from "url:../images/icon-reply.svg";
+import { calcTime } from "./helper.js";
 
-const container = document.querySelector(".container");
-const overlay = document.querySelector(".overlay");
-const popUpChoice = document.querySelector(".pop-up--choice");
-const popUpProfile = document.querySelector(".pop-up--profile");
-const profilePicBox = document.querySelector(".pop-up__profile-pic");
-const addComment = document.querySelector("#addComment");
+export const overlay = document.querySelector(".overlay");
+export const popup = document.querySelector(".pop-up");
+export const container = document.querySelector(".container");
 
-export function showInitForm() {
-  container.classList.add("hiddenDisplay");
-  overlay.classList.remove("hiddenOpacity");
-  popUpChoice.classList.remove("hiddenOpacity");
+export const html = {
+  spinner: `<ion-icon name="reload-sharp"></ion-icon>`,
+  userForm: `
+  <h2>Who are you ?</h2>
+  <form action="" class="pop-up__form">
+    <legend>Select your gender:</legend>
+    <div class="male">
+      <input type="radio" name="gender" id="male" value="male" checked />
+      <label for="male">male</label>
+    </div>
+    <div class="female">
+      <input type="radio" name="gender" id="female" value="female" />
+      <label for="female">female</label>
+    </div>
+
+    <input
+      type="number"
+      name="age"
+      id="age"
+      maxlength="2"
+      min="5"
+      max="85"
+      placeholder="26"
+      required
+    />
+    <label for="age">Select your age:</label>
+
+    <input
+      type="text"
+      name="name"
+      id="name"
+      placeholder="John Doe"
+      required
+    />
+    <label for="name">Write your username:</label>
+
+    <button type="submit" class="pop-up__btn pop-up__form__init-btn" data-task="initUserForm">
+      next
+    </button>
+  </form>`,
+  userPropic: `
+  <h2>Here's your avatar</h2>
+  <div class="pop-up__profile-pic">
+  </div>
+    <button class="pop-up__btn pop-up__btn--accept" data-task="setPropic">
+      fine
+    </button>
+    <button class="pop-up__btn pop-up__btn--cancel " data-task="unsetPropic">
+      Please no
+    </button>
+  </div>`,
+};
+
+export function renderElement(parent, html) {
+  parent.innerHTML = "";
+  parent.insertAdjacentHTML("beforeend", html);
 }
 
-export function changePopup() {
-  popUpChoice.classList.add("hiddenOpacity");
-  popUpProfile.classList.remove("hiddenOpacity");
+export function toggleForm() {
+  [overlay, popup].forEach((el) => el.classList.toggle("hiddenOpacity"));
 }
 
-export function closeInitForm() {
-  container.classList.remove("hiddenDisplay");
-  overlay.classList.add("hiddenOpacity");
-  popUpProfile.classList.add("hiddenOpacity");
-}
+// RENDER CONTAINER
+// parametri (comment, own?)
+// parent: se comment, container (beforeend); se reply, elemento precedente (afterend?)
+// OPPURE da comment (obj) vediamo se ha o no replies e da li deduciamo parent
 
-export async function initCurrentUserPic(gender, age) {
-  try {
-    profilePicBox.innerHTML = "";
-    let html = `
-      <svg>
-        <use href="images/icons.svg#icon-loader"></use>
-      </svg>`;
-    profilePicBox.insertAdjacentHTML("afterbegin", html);
+export function renderComment(comment) {
+  console.log("STAI PROVANDO A RENDERIZZARE UN: ");
 
-    const data = await generatePhoto(gender, age);
-    console.log(data);
-
-    profilePicBox.innerHTML = "";
-    html = `
-      <img src="${data.image_url}" alt="profile pic" class="pop-up__profile-pic__img" />
-      `;
-    profilePicBox.insertAdjacentHTML("afterbegin", html);
-
-    return data.image_url;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export async function generatePhoto(gender, age) {
-  try {
-    const res = await fetch(
-      `https://fakeface.rest/face/json?gender=${gender}&maximum_age=${
-        +age + 5
-      }&minimum_age=${+age - 5}`
-    );
-
-    if (!res.ok) {
-      return { image_url: "images/person.svg" };
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error(`here ur error: ${err}`);
-  }
-}
-
-// PROVVISORIA
-export function renderSubmitBtns(btns, username, image) {
-  btns.forEach((btn) => {
-    btn.closest(".comment").querySelector("img").src = image;
-    if (btn.closest(".comment").querySelector(".comment__username")) {
-      btn.closest(".comment").querySelector(".comment__username").textContent =
-        username;
-    }
-  });
-}
-
-export function renderComment(type, comment, own = false) {
-  let html;
-
-  if (type === "send") {
-    html = `
-    <div class="comment comment--own">
+  const html = `
+    <div class="comment${comment[1] ? " comment--reply" : ""}" data-id="${
+    comment[0].id
+  }">
       <div class="comment__likes">
         <button class="comment__likes__btn comment__likes__btn--up">+</button>
-        <p class="comment__likes__value">${comment.likes}</p>
+        <p class="comment__likes__value">${comment[0].likes}</p>
         <button class="comment__likes__btn comment__likes__btn--down">
           &ndash;
         </button>
       </div>
-      <img
-        src="${comment.image}"
-        alt="profile pic"
-        class="comment__avatar"
-      />
-      <p class="comment__username">
-        ${comment.username} ${
-      own ? `<span class="comment__tag">you</span>` : ``
-    }
-      </p>
-      <p class="comment__date">${comment.date} minutes ago</p>
-      <button class="comment__btn comment__btn--delete">
-        <img
-          src="images/icon-delete.svg"
-          alt="delete btn"
-          class="comment__btn__icon"
-        />
-        <span>Delete</span>
-      </button>
-      <button class="comment__btn comment__btn--edit">
-        <img
-          src="images/icon-edit.svg"
-          alt="edit btn"
-          class="comment__btn__icon"
-        />
-        <span>Edit</span>
+
+      <div class="comment__img">
+        ${
+          comment[0].image
+            ? `<img src="${comment[0].image}" alt="profile pic" class="comment__avatar" />`
+            : `<ion-icon name="person-sharp"></ion-icon>`
+        }
+      </div>
+
+      <p class="comment__username">${comment[0].username}</p>
+      <p class="comment__date">some placeholder ago</p>
+      <button class="comment__btn comment__btn--reply">
+        <ion-icon name="arrow-undo-sharp"></ion-icon>
+        <span>Reply</span>
       </button>
       <p class="comment__content">
-        ${comment.content}
+        ${comment[0].comment}
       </p>
     </div>`;
-    container.insertAdjacentHTML("beforeend", html);
-    addComment.querySelector(".form__input").value = "";
-    container.appendChild(addComment);
-  }
 
-  if (type === "reply") {
-    html = `
-    <div class="comment comment--reply">
-        <div class="comment__likes">
-          <button class="comment__likes__btn comment__likes__btn--up">+</button>
-          <p class="comment__likes__value">${comment.likes}</p>
-          <button class="comment__likes__btn comment__likes__btn--down">
-            &ndash;
-          </button>
-        </div>
-        <img
-          src="${comment.image}"
-          alt="profile pic"
-          class="comment__avatar"
-        />
-        <p class="comment__username">${comment.username} ${
-      own ? `<span class="comment__tag">you</span>` : ``
-    }</p>
-        <p class="comment__date">${comment.date} month ago</p>
-        <button class="comment__btn comment__btn--reply">
-          <img
-            src="images/icon-reply.svg"
-            alt="reply btn"
-            class="comment__btn__icon"
-          />
-          <span>Reply</span>
-        </button>
-        <p class="comment__content">
-        ${comment.content}
-        </p>
-      </div>`;
+  if (comment[1]) {
+    console.log("REPLY");
+
+    const parent = [...document.querySelectorAll(".comment")].find(
+      (el) =>
+        el.dataset.id ==
+        comment[1][
+          comment[1].length > 1 ? comment[1].length - 2 : comment[1].length - 1
+        ].id
+    );
+    console.log(parent);
+    parent.insertAdjacentHTML("afterend", html);
+  } else {
+    console.log("COMMENTO");
+
     container.insertAdjacentHTML("beforeend", html);
-    addComment.querySelector(".form__input").value = "";
-    container.appendChild(addComment);
   }
 }
