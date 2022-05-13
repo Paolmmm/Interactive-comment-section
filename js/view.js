@@ -62,21 +62,16 @@ export function renderElement(parent, html) {
   parent.insertAdjacentHTML("beforeend", html);
 }
 
-export function toggleForm() {
+export function toggleGeneralForm() {
   [overlay, popup].forEach((el) => el.classList.toggle("hiddenOpacity"));
 }
 
-// RENDER CONTAINER
-// parametri (comment, own?)
-// parent: se comment, container (beforeend); se reply, elemento precedente (afterend?)
-// OPPURE da comment (obj) vediamo se ha o no replies e da li deduciamo parent
-
-export function renderComment(comment) {
-  console.log("STAI PROVANDO A RENDERIZZARE UN: ");
-
+export function renderComment(comment, replyTo, own) {
   const html = `
-    <div class="comment${comment[1] ? " comment--reply" : ""}" data-id="${
-    comment[0].id
+    <div class="comment${comment[1] ? " comment--reply" : ""}${
+    own ? " comment--own" : ""
+  }" data-id="${comment[0].id}" data-date="${
+    calcTime(comment[0].date).split(" ")[0]
   }">
       <div class="comment__likes">
         <button class="comment__likes__btn comment__likes__btn--up">+</button>
@@ -94,20 +89,33 @@ export function renderComment(comment) {
         }
       </div>
 
-      <p class="comment__username">${comment[0].username}</p>
-      <p class="comment__date">some placeholder ago</p>
-      <button class="comment__btn comment__btn--reply">
-        <ion-icon name="arrow-undo-sharp"></ion-icon>
-        <span>Reply</span>
-      </button>
+      <p class="comment__username">${comment[0].username}<span>${
+    own ? "you" : ""
+  }</span></p>
+      <p class="comment__date">${calcTime(comment[0].date)}</p>
+
+      ${
+        own
+          ? `<button class="comment__btn comment__btn--delete">
+          <ion-icon name="trash-bin"></ion-icon>
+          <span>Delete</span>
+        </button>
+        <button class="comment__btn comment__btn--edit">
+          <ion-icon name="pencil-sharp"></ion-icon>          
+          <span>Edit</span>
+        </button>`
+          : `<button class="comment__btn comment__btn--reply">
+          <ion-icon name="arrow-undo-sharp"></ion-icon>
+          <span>Reply</span>
+        </button>`
+      }
+
       <p class="comment__content">
-        ${comment[0].comment}
+        <span>${replyTo ? `@${replyTo} ` : ""}</span>${comment[0].comment}
       </p>
     </div>`;
 
   if (comment[1]) {
-    console.log("REPLY");
-
     const parent = [...document.querySelectorAll(".comment")].find(
       (el) =>
         el.dataset.id ==
@@ -115,11 +123,97 @@ export function renderComment(comment) {
           comment[1].length > 1 ? comment[1].length - 2 : comment[1].length - 1
         ].id
     );
-    console.log(parent);
     parent.insertAdjacentHTML("afterend", html);
   } else {
-    console.log("COMMENTO");
-
     container.insertAdjacentHTML("beforeend", html);
+
+    container.lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
   }
+}
+
+export function formSendComment(user) {
+  let value;
+  if (document.querySelector("#send-comment")) {
+    value = document.querySelector("#send-comment").value;
+
+    document.querySelector("#send-comment").closest(".comment").remove();
+  }
+
+  const html = `
+    <div class="comment comment--add" id="addComment">
+    ${
+      user.image
+        ? `<img
+    src="${user.image}"
+    alt="profile pic"
+    class="comment--add__avatar"
+  />`
+        : `<ion-icon name="person-sharp" class="comment--add__avatar"></ion-icon>`
+    }
+      
+      <form action="" class="form">
+        <textarea
+          name="send-comment"
+          id="send-comment"
+          placeholder="Add a comment..."
+          class="form__input"
+          rows="3"
+          required
+        >${value ? value : ""}</textarea>
+        <label for="send-comment"
+          ><button class="submit-btn submit-btn--send" type="submit">
+            SEND
+          </button></label
+        >
+      </form>
+    </div>
+  `;
+
+  container.insertAdjacentHTML("beforeend", html);
+}
+
+export function openCommentForm(user, parent, update) {
+  if (document.querySelector(".submit-btn--reply")) {
+    document.querySelector(".submit-btn--reply").closest(".comment").remove();
+  }
+
+  // CORREGGERE TUTTO QUI
+
+  const html = `
+    <div class="comment comment--reply comment--add">
+      <img
+        src="${user.image}"
+        alt="profile pic"
+        class="comment--add__avatar"
+      />
+      <form action="" class="form">
+        <textarea
+          name="reply-comment"
+          id="reply-comment"
+          placeholder="Add a comment..."
+          class="form__input"
+          rows="3"
+          required
+        >${update ? update : ""}</textarea>
+        <label for="reply-comment"
+          ><button class="submit-btn submit-btn--reply" type="submit">
+            REPLY
+          </button></label
+        >
+      </form>
+    </div>
+  `;
+
+  parent.insertAdjacentHTML("afterend", html);
+}
+
+export function findParent(prevSib) {
+  if (prevSib.classList.contains("comment--reply")) {
+    return findParent(prevSib.previousElementSibling);
+  }
+  return prevSib;
+}
+
+export function removeComment(e) {
+  e.target.closest(".comment").remove();
 }

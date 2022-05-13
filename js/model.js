@@ -26,26 +26,22 @@ export async function generateComment() {
   try {
     const res =
       await fetch(`https://fakerapi.it/api/v1/custom?_quantity=1&username=lastName&birthday=date&boolean=boolean&comment=text
-  `);
+    `);
     const data = await res.json();
-
     const age = today.getFullYear() - data.data[0].birthday.split("-")[0];
     const gender = data.data[0].boolean ? "male" : "female";
 
     const photo = await generateFace(gender, age);
-    const likes = Math.trunc(Math.random() * MAX_AGE);
-    const repliesLength = comments.reduce((acc, el) => {
-      acc = acc + el.replies.length;
-      return acc;
-    }, 0);
-    const id = repliesLength + comments.length;
+    // const likes = Math.trunc(Math.random() * MAX_AGE);
+
+    const id = calcID();
 
     return {
       username: data.data[0].username,
       comment: data.data[0].comment,
       id: id,
       image: photo,
-      likes: likes,
+      likes: 0,
       date: new Date(),
     };
   } catch (err) {
@@ -53,20 +49,42 @@ export async function generateComment() {
   }
 }
 
+export function calcID() {
+  const repliesLength = comments.reduce((acc, el) => {
+    acc = acc + el.replies.length;
+    return acc;
+  }, 0);
+  return repliesLength + comments.length;
+}
+
 export function positionComment(comment) {
   if (comments.length < 1 || Math.random() < 0.5) {
     comment.replies = [];
     comments.push(comment);
-    // console.log(comments);
     return [comment];
   } else {
     const i = calcNum(comments.length);
     comments[i].replies.push(comment);
-    // console.log(comments);
     return [
       comment,
       comments[i].replies.length > 1 ? comments[i].replies : [comments[i]],
     ];
+  }
+}
+
+export function positionOwnComment(comment, type, parentID) {
+  if (type === "send") {
+    comment.replies = [];
+    comments.push(comment);
+    return [comment];
+  }
+
+  if (type === "reply") {
+    const parent = comments.find((el) => el.id == parentID);
+
+    parent.replies.push(comment);
+
+    return [comment, parent.replies.length > 1 ? parent.replies : [parent]];
   }
 }
 
@@ -82,6 +100,19 @@ export function setPropic(image) {
 
 export function saveUserState() {
   localStorage.setItem("user", JSON.stringify(user));
+}
+
+export function deleteComment(id, parentID) {
+  const parentComment = comments.find((comment) => comment.id === parentID);
+
+  if (parentComment.id === id) {
+    delete comments.comment;
+  } else {
+    const index = parentComment.replies.findIndex(
+      (comment) => comment.id === id
+    );
+    parentComment.replies.splice(index, 1);
+  }
 }
 
 function init() {
