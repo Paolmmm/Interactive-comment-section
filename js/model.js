@@ -3,6 +3,7 @@ import { calcNum, today } from "./helper.js";
 
 export let user = {};
 export const comments = [];
+let total = 0;
 
 export async function generateFace(gender, age) {
   try {
@@ -113,6 +114,58 @@ export function deleteComment(id, parentID) {
     );
     parentComment.replies.splice(index, 1);
   }
+}
+
+export function editComment(id, parentID, content) {
+  const parentComment = comments.find((comment) => comment.id === parentID);
+
+  if (parentComment.id === id) {
+    parentComment.comment = content;
+  } else {
+    const index = parentComment.replies.findIndex(
+      (comment) => comment.id === id
+    );
+    parentComment.replies[index].comment = content;
+  }
+}
+
+export function countComments() {
+  return total++;
+}
+
+export function editLikes(total) {
+  const comment = comments[Math.trunc(Math.random() * comments.length)];
+
+  if (comment.replies.length > 0 && Math.random() > 0.5) {
+    const reply =
+      comment.replies[Math.trunc(Math.random() * comment.replies.length)];
+
+    reply.likes = Math.trunc(Math.random() * total);
+
+    return reply;
+  } else {
+    comment.likes = Math.trunc(Math.random() * total);
+
+    return comment;
+  }
+}
+
+export function addRemoveLikes(type, id, parentID) {
+  console.log(parentID, !isNaN(parentID));
+  let currComment;
+  if (!isNaN(parentID) && id !== parentID) {
+    currComment = comments
+      .find((comment) => comment.id === parentID)
+      .replies.find((reply) => reply.id === id);
+
+    type === "add" ? currComment.likes++ : currComment.likes--;
+  } else {
+    currComment = comments.find((comment) => comment.id === id);
+
+    type === "add" ? currComment.likes++ : currComment.likes--;
+  }
+
+  return currComment;
 }
 
 function init() {

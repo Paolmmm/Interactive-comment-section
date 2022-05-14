@@ -114,26 +114,72 @@ view.container.addEventListener("click", function (e) {
   if (e.target.closest("button").classList.contains("comment__btn--edit")) {
     console.log(e.target.closest("button"));
 
-    // prendi contenuto commento
-    // const content = e.target
-    //   .closest(".comment")
-    //   .querySelector(".comment__content").innerText;
-
-    // NASCONDI commento
-    // const comment = e.target.closest(".comment");
     const comment = e.target.closest(".comment");
     console.log(comment);
     comment.classList.add("hiddenDisplay");
 
-    // apri il form con openCommentForm(user, parent, update) -> visualizzare il commento nel textarea del form
-    view.openCommentForm(model.user, comment);
+    view.openCommentForm(model.user, comment, true);
   }
 
   if (e.target.classList.contains("submit-btn--update")) {
-    // non permette TASTO UPDATE se textarea vuota
-    // aggiorna contenuto model
-    // aggiorna contenuto commento view
-    // elimina form
+    const form = e.target.closest(".comment");
+    const comment = document.querySelector(".hiddenDisplay");
+    const content = form.querySelector("textarea").value.trim();
+
+    const parentID = +view.findParent(comment).dataset.id;
+    const id = +comment.dataset.id;
+
+    console.log(form, comment, content, parentID, id);
+
+    model.editComment(id, parentID, content);
+
+    view.editComment(comment, content);
+    comment.classList.remove("hiddenDisplay");
+    form.remove();
+
+    // RIPULISCI E ORGANIZZA
+    // CORREGGI SPAN TEXT BOLD
+  }
+
+  if (e.target.classList.contains("comment__likes__btn")) {
+    const comment = e.target.closest(".comment");
+
+    if (
+      e.target.classList.contains("comment__likes__btn--up") &&
+      comment.dataset.likes === "false"
+    ) {
+      if (comment.classList.contains("comment--reply")) {
+        const parent = view.findParent(comment);
+        view.editLikes(
+          model.addRemoveLikes("add", +comment.dataset.id, +parent.dataset.id)
+        );
+      } else {
+        view.editLikes(model.addRemoveLikes("add", +comment.dataset.id));
+      }
+
+      comment.dataset.likes = "true";
+    }
+
+    if (
+      e.target.classList.contains("comment__likes__btn--down") &&
+      comment.dataset.likes === "true"
+    ) {
+      if (comment.classList.contains("comment--reply")) {
+        const parent = view.findParent(comment);
+        view.editLikes(
+          model.addRemoveLikes(
+            "remove",
+            +comment.dataset.id,
+            +parent.dataset.id
+          )
+        );
+      } else {
+        view.editLikes(model.addRemoveLikes("remove", +comment.dataset.id));
+      }
+
+      comment.dataset.likes = "false";
+      // model.addRemoveLikes(+comment.dataset.id);
+    }
   }
 });
 
@@ -188,8 +234,14 @@ function commentGenerator(num) {
 
       view.renderComment(comment);
       view.formSendComment(model.user);
+      likesGenerator(model.countComments());
     }, total * 1000);
   }
+}
+
+function likesGenerator(total) {
+  view.editLikes(model.editLikes(total));
+  console.log(model.comments);
 }
 
 async function init() {
@@ -199,8 +251,6 @@ async function init() {
 init();
 
 // FEATURES IN ORDINE D'URGENZA
-// -update commento
-// -aggiungi/rimuovi likes -> v0.9
 // -ripulisci codice
 // -genera nuova chat
 // -genera nuovo user

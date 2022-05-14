@@ -72,7 +72,7 @@ export function renderComment(comment, replyTo, own) {
     own ? " comment--own" : ""
   }" data-id="${comment[0].id}" data-date="${
     calcTime(comment[0].date).split(" ")[0]
-  }">
+  }" data-likes=${false}>
       <div class="comment__likes">
         <button class="comment__likes__btn comment__likes__btn--up">+</button>
         <p class="comment__likes__value">${comment[0].likes}</p>
@@ -177,10 +177,12 @@ export function openCommentForm(user, parent, update) {
     document.querySelector(".submit-btn--reply").closest(".comment").remove();
   }
 
-  // CORREGGERE TUTTO QUI
-
   const html = `
-    <div class="comment comment--reply comment--add">
+    <div class="comment ${
+      update && !parent.classList.contains("comment--reply")
+        ? ""
+        : "comment--reply"
+    } comment--add">
       <img
         src="${user.image}"
         alt="profile pic"
@@ -188,16 +190,22 @@ export function openCommentForm(user, parent, update) {
       />
       <form action="" class="form">
         <textarea
-          name="reply-comment"
-          id="reply-comment"
+          name="${update ? "update" : "reply"}-comment"
+          id="${update ? "update" : "reply"}-comment"
           placeholder="Add a comment..."
           class="form__input"
           rows="3"
           required
-        >${update ? update : ""}</textarea>
-        <label for="reply-comment"
-          ><button class="submit-btn submit-btn--reply" type="submit">
-            REPLY
+        >${
+          update
+            ? parent.querySelector(".comment__content").innerText.trim()
+            : ""
+        }</textarea>
+        <label for="${update ? "update" : "reply"}-comment"
+          ><button class="submit-btn submit-btn--${
+            update ? "update" : "reply"
+          }" type="submit">
+            ${update ? "UPDATE" : "REPLY"}
           </button></label
         >
       </form>
@@ -216,4 +224,17 @@ export function findParent(prevSib) {
 
 export function removeComment(e) {
   e.target.closest(".comment").remove();
+}
+
+export function editComment(comment, content) {
+  comment.querySelector(".comment__content").innerText = content;
+}
+
+export function editLikes(comment) {
+  console.log(comment);
+  const currComment = [...document.querySelectorAll(".comment")].find(
+    (el) => +el.dataset.id === comment.id
+  );
+
+  currComment.querySelector(".comment__likes__value").innerText = comment.likes;
 }
