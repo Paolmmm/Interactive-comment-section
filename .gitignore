@@ -1,7 +1,4 @@
 .parcel-cache
 dist
-interactive-comment-section-main
 node_modules
-data.json
-content.md
-script.js
+

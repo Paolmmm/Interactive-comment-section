@@ -158,7 +158,6 @@ export function editLikes(total) {
 }
 
 export function addRemoveLikes(type, id, parentID) {
-  console.log(parentID, !isNaN(parentID));
   let currComment;
   if (!isNaN(parentID) && id !== parentID) {
     currComment = comments

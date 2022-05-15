@@ -126,10 +126,8 @@ view.container.addEventListener("click", function (e) {
   }
 
   if (e.target.closest("button").classList.contains("comment__btn--edit")) {
-    console.log(e.target.closest("button"));
-
     const comment = e.target.closest(".comment");
-    console.log(comment);
+
     comment.classList.add("hiddenDisplay");
 
     view.openCommentForm(model.user, comment, true);
@@ -143,8 +141,6 @@ view.container.addEventListener("click", function (e) {
     const parentID = +view.findParent(comment).dataset.id;
     const id = +comment.dataset.id;
 
-    console.log(form, comment, content, parentID, id);
-
     model.editComment(id, parentID, content);
 
     view.editComment(comment, content);
@@ -157,6 +153,7 @@ view.container.addEventListener("click", function (e) {
 
   if (e.target.classList.contains("comment__likes__btn")) {
     const comment = e.target.closest(".comment");
+    let type;
 
     if (
       e.target.classList.contains("comment__likes__btn--up") &&
@@ -171,7 +168,7 @@ view.container.addEventListener("click", function (e) {
         view.editLikes(model.addRemoveLikes("add", +comment.dataset.id));
       }
 
-      comment.dataset.likes = "true";
+      type = "true";
     }
 
     if (
@@ -191,9 +188,12 @@ view.container.addEventListener("click", function (e) {
         view.editLikes(model.addRemoveLikes("remove", +comment.dataset.id));
       }
 
-      comment.dataset.likes = "false";
-      // model.addRemoveLikes(+comment.dataset.id);
+      type = "false";
     }
+
+    comment.querySelector(".comment__likes__value").innerText == 0
+      ? (comment.dataset.likes = "")
+      : (comment.dataset.likes = type);
   }
 });
 
@@ -240,7 +240,6 @@ function commentGenerator(num) {
     const n = Math.trunc(Math.random() * getMaxInterval(i)) + 1;
     total += n;
     // console.log(`Comment ${i + 1} printed after ${n}sec`);
-    console.log(i, MAX_INTERVAL);
 
     setTimeout(async () => {
       const comment = model.positionComment(await model.generateComment());

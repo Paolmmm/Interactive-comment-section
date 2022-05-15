@@ -304,6 +304,8 @@ button {
     padding: 1rem;
     font-size: 4rem;
     cursor: pointer; }
+    .menu > *:active {
+      transform: scale(1.05); }
   .menu__new-chat {
     background-color: var(--Soft-Red);
     border-radius: 10px; }

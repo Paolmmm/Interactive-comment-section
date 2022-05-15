@@ -5,14 +5,14 @@
   "source": "index.html",
   "scripts": {
     "compile:sass": "node-sass sass/main.scss style.css -w",
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "author": "Paolm",
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.5.0",
-    "node-sass": "^7.0.1",
-    "parcel": "^2.5.0"
+    "node-sass": "^7.0.1"
   },
   "dependencies": {
     "core-js": "^3.22.4",
