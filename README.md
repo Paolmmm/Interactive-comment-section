@@ -8,5 +8,7 @@ solution and that's the one you can see in the controller's function commentGene
 
 The pop up menu is very basic but it's just a minor feature that needed to be implemented.
 
-BUGS: as of now the only one i can recall is that if you reply to a reply, the comment will start with a quote (@name) in bold, if you edit the comment the quote will
+BUGS: 
+- if you reply to a reply, the comment will start with a quote (@name) in bold, if you edit the comment the quote will
 then turn into standard text (because it's not in the span anymore). You can also delete it, nothing will change in the "database".
+- personal comments often has a wrong date that gets sometimes fixed as a new comment gets printed
