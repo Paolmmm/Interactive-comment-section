@@ -404,7 +404,7 @@ button {
 .menu {
   z-index: 3;
   position: fixed;
-  top: -15%;
+  top: -50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: fit-content;
@@ -414,6 +414,7 @@ button {
 
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   background-color: var(--White);
   border-radius: 10px;
@@ -435,7 +436,7 @@ button {
 }
 
 .menu-icon__active ~ .menu {
-  top: 20%;
+  top: 40%;
 }
 
 .menu-icon__active ~ .overlay {

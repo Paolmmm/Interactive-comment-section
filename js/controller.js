@@ -72,7 +72,9 @@ view.container.addEventListener("click", function (e) {
     document.querySelector("#send-comment").value = "";
     view.formSendComment(model.user);
 
-    console.log(model.comments);
+    setTime([...document.querySelectorAll(`[data-date]`)]);
+
+    // console.log(model.comments);
   }
 
   if (e.target.closest("button").classList.contains("comment__btn--reply")) {
@@ -115,6 +117,8 @@ view.container.addEventListener("click", function (e) {
     );
 
     document.querySelector(".submit-btn--reply").closest(".comment").remove();
+
+    setTime([...document.querySelectorAll(`[data-date]`)]);
   }
 
   if (e.target.closest("button").classList.contains("comment__btn--delete")) {
@@ -264,11 +268,21 @@ function commentGenerator(num) {
 }
 
 function setTime(arr) {
-  const dates = arr.map((el) => el.dataset.date);
+  const dates = arr
+    .map((el) => el.dataset.date)
+    .sort((a, b) => a.split(" ")[0] - b.split(" ")[0]);
+
   const ids = arr.map((el) => el.dataset.id).sort((a, b) => b - a);
 
+  dates[0] = "1 second ago";
+
   ids.forEach((el, i) => {
-    arr[el].querySelector(".comment__date").innerText = dates[i];
+    arr[arr.findIndex((elem) => elem.dataset.id == el)].querySelector(
+      ".comment__date"
+    ).innerText =
+      dates[i].split(" ")[0] > 60
+        ? `${Math.trunc(dates[i].split(" ")[0] / 60)} minutes ago`
+        : dates[i];
   });
 }
 
