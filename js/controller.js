@@ -1,7 +1,21 @@
 import * as view from "./view.js";
 import * as model from "./model.js";
 import * as helper from "./helper.js";
-import { MAX_COMMENTS, MAX_INTERVAL } from "./config.js";
+import { MAX_COMMENTS, MAX_INTERVAL, getMaxInterval } from "./config.js";
+
+view.menuIcon.addEventListener("click", function (e) {
+  view.menuIcon.classList.toggle("menu-icon__active");
+});
+
+view.menu.addEventListener("click", function (e) {
+  if (e.target.classList.contains("menu__new-user")) {
+    newUser();
+  }
+
+  if (e.target.classList.contains("menu__new-chat")) {
+    newChat();
+  }
+});
 
 view.popup.addEventListener("click", function (e) {
   if (e.target.dataset.task === "initUserForm") {
@@ -146,7 +160,7 @@ view.container.addEventListener("click", function (e) {
 
     if (
       e.target.classList.contains("comment__likes__btn--up") &&
-      comment.dataset.likes === "false"
+      comment.dataset.likes !== "true"
     ) {
       if (comment.classList.contains("comment--reply")) {
         const parent = view.findParent(comment);
@@ -162,7 +176,7 @@ view.container.addEventListener("click", function (e) {
 
     if (
       e.target.classList.contains("comment__likes__btn--down") &&
-      comment.dataset.likes === "true"
+      comment.dataset.likes !== "false"
     ) {
       if (comment.classList.contains("comment--reply")) {
         const parent = view.findParent(comment);
@@ -223,25 +237,49 @@ function commentGenerator(num) {
   // GENERA COMMENTI OGNI TOT TEMPO IN SEQUENZA
   let total = 0;
   for (let i = 0; i < num; i++) {
-    const n = Math.trunc(Math.random() * MAX_INTERVAL) + 1;
+    const n = Math.trunc(Math.random() * getMaxInterval(i)) + 1;
     total += n;
     // console.log(`Comment ${i + 1} printed after ${n}sec`);
+    console.log(i, MAX_INTERVAL);
 
     setTimeout(async () => {
       const comment = model.positionComment(await model.generateComment());
 
-      // FEATURE TEMPO
-
       view.renderComment(comment);
       view.formSendComment(model.user);
       likesGenerator(model.countComments());
+
+      if (document.querySelector("textarea").value) {
+        document.querySelector("textarea").focus();
+      } else {
+        view.container.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+
+      setTime([...document.querySelectorAll(`[data-date]`)]);
     }, total * 1000);
   }
 }
 
+function setTime(arr) {
+  const dates = arr.map((el) => el.dataset.date);
+  const ids = arr.map((el) => el.dataset.id).sort((a, b) => b - a);
+
+  ids.forEach((el, i) => {
+    arr[el].querySelector(".comment__date").innerText = dates[i];
+  });
+}
+
 function likesGenerator(total) {
   view.editLikes(model.editLikes(total));
-  console.log(model.comments);
+}
+
+function newChat() {
+  location.reload();
+}
+
+function newUser() {
+  model.deleteUserState();
+  location.reload();
 }
 
 async function init() {
@@ -249,9 +287,3 @@ async function init() {
   checkUser();
 }
 init();
-
-// FEATURES IN ORDINE D'URGENZA
-// -ripulisci codice
-// -genera nuova chat
-// -genera nuovo user
-// -orario inserimento commento -> v1.0

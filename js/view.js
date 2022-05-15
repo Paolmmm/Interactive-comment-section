@@ -3,6 +3,8 @@ import { calcTime } from "./helper.js";
 export const overlay = document.querySelector(".overlay");
 export const popup = document.querySelector(".pop-up");
 export const container = document.querySelector(".container");
+export const menu = document.querySelector(".menu");
+export const menuIcon = document.querySelector(".menu-icon");
 
 export const html = {
   spinner: `<ion-icon name="reload-sharp"></ion-icon>`,
@@ -70,9 +72,9 @@ export function renderComment(comment, replyTo, own) {
   const html = `
     <div class="comment${comment[1] ? " comment--reply" : ""}${
     own ? " comment--own" : ""
-  }" data-id="${comment[0].id}" data-date="${
-    calcTime(comment[0].date).split(" ")[0]
-  }" data-likes=${false}>
+  }" data-id="${comment[0].id}" data-date="${calcTime(
+    comment[0].date
+  )}" data-likes="">
       <div class="comment__likes">
         <button class="comment__likes__btn comment__likes__btn--up">+</button>
         <p class="comment__likes__value">${comment[0].likes}</p>
@@ -126,8 +128,6 @@ export function renderComment(comment, replyTo, own) {
     parent.insertAdjacentHTML("afterend", html);
   } else {
     container.insertAdjacentHTML("beforeend", html);
-
-    container.lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
   }
 }
 
@@ -231,7 +231,6 @@ export function editComment(comment, content) {
 }
 
 export function editLikes(comment) {
-  console.log(comment);
   const currComment = [...document.querySelectorAll(".comment")].find(
     (el) => +el.dataset.id === comment.id
   );

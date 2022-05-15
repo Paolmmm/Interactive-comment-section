@@ -3,7 +3,7 @@ import { calcNum, today } from "./helper.js";
 
 export let user = {};
 export const comments = [];
-let total = 0;
+export let totalComments = 0;
 
 export async function generateFace(gender, age) {
   try {
@@ -103,17 +103,24 @@ export function saveUserState() {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
+export function deleteUserState() {
+  localStorage.clear();
+}
+
 export function deleteComment(id, parentID) {
   const parentComment = comments.find((comment) => comment.id === parentID);
 
   if (parentComment.id === id) {
-    delete comments.comment;
+    const index = comments.findIndex((comment) => comment.id == id);
+    comments.splice(index, 1);
   } else {
     const index = parentComment.replies.findIndex(
       (comment) => comment.id === id
     );
     parentComment.replies.splice(index, 1);
   }
+
+  console.log(comments);
 }
 
 export function editComment(id, parentID, content) {
@@ -130,7 +137,7 @@ export function editComment(id, parentID, content) {
 }
 
 export function countComments() {
-  return total++;
+  return totalComments++;
 }
 
 export function editLikes(total) {
@@ -166,6 +173,20 @@ export function addRemoveLikes(type, id, parentID) {
   }
 
   return currComment;
+}
+
+export function getTime(id, parentID) {
+  const parentComment = comments.find((comment) => comment.id === parentID);
+
+  if (parentComment.id === id) {
+    console.log("ok", parentComment.date);
+    return parentComment.date;
+  }
+  console.log("anche ok");
+
+  return parentComment.replies[
+    parentComment.replies.findIndex((comment) => comment.id === id)
+  ].date;
 }
 
 function init() {

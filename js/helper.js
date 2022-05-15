@@ -5,18 +5,13 @@ export function calcNum(arr) {
   return n > (arr - 1) / 2 ? Math.floor(n) : Math.ceil(n);
 }
 
-// DEPRECATA
 export function calcTime(date) {
-  const dateTotal = +(
-    date.getMinutes().toString() + date.getSeconds().toString().padStart(2, 0)
-  );
-  const todayTotal = +(
-    today.getMinutes().toString() + today.getSeconds().toString().padStart(2, 0)
-  );
+  const dateTotal = date.getTime();
+  const todayTotal = today.getTime();
 
-  const time = date.getSeconds() - today.getSeconds();
+  const time = Math.trunc((dateTotal - todayTotal) / 1000);
 
-  return time < 60 ? `${time} seconds ago` : `${time} minutes ago`;
+  return time < 60
+    ? `${time} ${time < 2 ? "second" : "seconds"} ago`
+    : `${Math.trunc(time / 60)} ${time < 120 ? "minute" : "minutes"} ago`;
 }
-
-

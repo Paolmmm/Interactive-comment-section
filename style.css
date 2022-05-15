@@ -154,7 +154,7 @@ button {
     .comment__date {
       position: absolute;
       top: 2.7rem;
-      left: 16rem; } }
+      right: 2rem; } }
   .comment__btn {
     justify-self: flex-end;
     display: flex;
@@ -214,7 +214,6 @@ button {
 @media only screen and (max-width: 38.5em) {
   .comment--own .comment__date {
     position: absolute;
-    left: 21rem;
     top: 3rem; } }
 
 .comment--add {
@@ -245,14 +244,86 @@ button {
       flex-direction: column;
       align-items: flex-end; } }
 
+.menu-icon {
+  position: fixed;
+  top: 2rem;
+  right: 1rem;
+  background-color: black;
+  width: 3rem;
+  height: 0.4rem;
+  border-radius: 5px;
+  z-index: 3;
+  transition: 0.2s all;
+  cursor: pointer; }
+  .menu-icon::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0.7rem;
+    right: 0;
+    background-color: black;
+    border-radius: inherit;
+    transition: 0.2s all;
+    cursor: inherit; }
+  .menu-icon::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: -0.7rem;
+    right: 0;
+    background-color: black;
+    border-radius: inherit;
+    transition: 0.2s all;
+    cursor: inherit; }
+  .menu-icon__active {
+    background-color: transparent; }
+    .menu-icon__active::before {
+      transform: rotate(45deg);
+      top: 0; }
+    .menu-icon__active::after {
+      transform: rotate(-45deg);
+      top: 0; }
+
+.menu {
+  z-index: 3;
+  position: fixed;
+  top: -15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  transition: 0.2s all;
+  padding: 2rem;
+  box-shadow: 0 5px 20px rgba(86, 86, 86, 0.4);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--White);
+  border-radius: 10px; }
+  .menu > * {
+    padding: 1rem;
+    font-size: 4rem;
+    cursor: pointer; }
+  .menu__new-chat {
+    background-color: var(--Soft-Red);
+    border-radius: 10px; }
+
+.menu-icon__active ~ .menu {
+  top: 20%; }
+
+.menu-icon__active ~ .overlay {
+  visibility: visible;
+  opacity: 1; }
+
 .overlay {
-  z-index: 5;
+  z-index: 2;
   position: fixed;
   top: 0;
   right: 0;
   backdrop-filter: blur(2px) brightness(70%);
   height: 100%;
-  width: 100%; }
+  width: 100%;
+  transition: 0.2s all; }
 
 .pop-up {
   z-index: 10;
@@ -269,7 +340,8 @@ button {
   grid-template-columns: repeat(2, 1fr);
   column-gap: 1.4rem;
   box-shadow: 0 5px 20px rgba(86, 86, 86, 0.4);
-  text-align: center; }
+  text-align: center;
+  transition: 0.2s all; }
   .pop-up h2 {
     margin-bottom: 2.5rem;
     color: var(--Dark-blue);
