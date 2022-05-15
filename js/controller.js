@@ -248,8 +248,12 @@ function commentGenerator(num) {
       view.formSendComment(model.user);
       likesGenerator(model.countComments());
 
-      if (document.querySelector("textarea").value) {
+      const content = document.querySelector("textarea").value;
+
+      if (content) {
         document.querySelector("textarea").focus();
+        document.querySelector("textarea").value = "";
+        document.querySelector("textarea").value = content;
       } else {
         view.container.scrollIntoView({ behavior: "smooth", block: "end" });
       }
