@@ -1,7 +1,7 @@
 export const MAX_AGE = 75;
 export const MIN_AGE = 11;
-export const MAX_COMMENTS = 20;
-export let MAX_INTERVAL = 10;
+export const MAX_COMMENTS = 50;
+export let MAX_INTERVAL = 5;
 
 export function getMaxInterval(num) {
   if (num !== 0 && num % 5 === 0) {

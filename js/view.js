@@ -213,6 +213,7 @@ export function openCommentForm(user, parent, update) {
   `;
 
   parent.insertAdjacentHTML("afterend", html);
+  container.querySelector("textarea").focus();
 }
 
 export function findParent(prevSib) {
