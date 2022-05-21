@@ -12,3 +12,4 @@ BUGS:
 - if you reply to a reply, the comment will start with a quote (@name) in bold, if you edit the comment the quote will
 then turn into standard text (because it's not in the span anymore). You can also delete it, nothing will change in the "database".
 - personal comments date is wrong but that's a problem with the whole time system, pretty sure it's not how this kind of stuff get handled
+- infinite likes/dislikes
